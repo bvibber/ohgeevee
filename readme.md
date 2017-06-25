@@ -8,7 +8,7 @@ The demo loads some very simple geometry: a floor, a flat control bar, and a pla
 
 Gaze at the video plane or the control bar and tap/click to start/stop the video. (In some desktop browsers the video may autoplay, but in mobile browsers you'll need to tap or click first.)
 
-If the browser supports WebM VP8+Vorbis playback natively (Firefox, Chrome) it will use native decoding, otherwise (Safari, Edge) it will use the ogv.js decoder automatically. This uses more CPU, but on a background thread so "in theory" should not slow down main-thread rendering too much.
+If the browser supports WebM VP8+Vorbis playback natively (Firefox, Chrome) it will use native decoding, otherwise (Safari, Edge) it will use the ogv.js decoder automatically. This uses more CPU, but on a background thread so "in theory" should not slow down main-thread rendering too much. Edge seems to have some problems and the video texture flickers a lot, but Safari works nicely.
 
 [See current live demo](https://brionv.com/misc/ohgeevee/).
 
