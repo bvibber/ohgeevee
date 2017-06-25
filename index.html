@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+	</head>
+	<body>
+		<a-scene>
+			<a-camera>
+				<a-cursor></a-cursor>
+			</a-camera>
+
+			<!-- the floor -->
+			<a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+
+			<!-- the virtual screen -->
+			<a-video position="0 1.875 -4" rotation="0 0 0" width="4" height="2.25"  src="#vid-source" playpause="#vid-source"></a-video>
+
+			<!-- the control bar -->
+			<a-plane position="0 0.5 -3.5" rotation="-10 0 0" width="3" height="0.5" color="#4080c0" playpause="#vid-source"></a-plane>
+
+			<a-sky color="#ECECEC"></a-sky>
+		</a-scene>
+		<script>
+			AFRAME.registerComponent('playpause', {
+				schema: {
+					type: 'string'
+				},
+				init: function () {
+					var self = this;
+					this.el.addEventListener('click', function() {
+						var vid = document.querySelector(self.data);
+						if (vid.paused) {
+							vid.play();
+						} else {
+							vid.pause();
+						}
+					});
+				},
+			});
+		</script>
+		<video id=vid-source>
+			<source src="https://media-streaming.wmflabs.org/constrained/transcoded/9/96/Curiosity%27s_Seven_Minutes_of_Terror.ogv/Curiosity%27s_Seven_Minutes_of_Terror.ogv.360p.webm" type="video/webm; codecs=vp8,vorbis"></source>
+		</video>
+	</body>
+</html>
