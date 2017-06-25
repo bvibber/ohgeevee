@@ -2,33 +2,49 @@
 <html>
 	<head>
 		<meta charset=utf-8>
+		<title>ohgeevee - WebM playback in VR with ogv.js or native</title>
 		<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+		<script src="https://brionv.com/misc/ogv.js/demo/lib/ogv.js?version=1.4.2-20170425030944-ded18d14"></script>
 	</head>
 	<body>
-		<a-scene>
-			<a-camera>
-				<a-cursor></a-cursor>
-			</a-camera>
-
-			<!-- the floor -->
-			<a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-
-			<!-- the virtual screen -->
-			<a-video position="0 1.875 -4" rotation="0 0 0" width="4" height="2.25"  src="#vid-source" playpause="#vid-source"></a-video>
-
-			<!-- the control bar -->
-			<a-plane position="0 0.5 -3.5" rotation="-10 0 0" width="3" height="0.5" color="#4080c0" playpause="#vid-source"></a-plane>
-
-			<a-sky color="#ECECEC"></a-sky>
-		</a-scene>
+		<div style="display:none">
+			<video id=vid-source class="vid-control">
+				<source src="https://media-streaming.wmflabs.org/constrained/transcoded/9/96/Curiosity%27s_Seven_Minutes_of_Terror.ogv/Curiosity%27s_Seven_Minutes_of_Terror.ogv.360p.webm" type="video/webm; codecs=vp8,vorbis"></source>
+			</video>
+		</div>
 		<script>
+			(function () {
+				var vid = document.querySelector('#vid-source');
+				var source = vid.querySelector('source');
+				if (vid.canPlayType(source.type) == '') {
+					console.log('ogv!');
+					var ogv = new OGVPlayer({
+						enableWebM: true
+					});
+					ogv.width = 640;
+					ogv.height = 360;
+					ogv.src = source.src;
+					ogv.className = vid.className;
+
+					// hack!
+					// we need to use the canvas sub-element as the texture source.
+					//ogv.id = vid.id;
+					ogv.querySelector('canvas').id = vid.id;
+
+					vid.parentNode.insertBefore(ogv, vid);
+					vid.parentNode.removeChild(vid);
+
+					ogv.load();
+				}
+			})();
+
 			AFRAME.registerComponent('playpause', {
 				schema: {
 					type: 'string'
 				},
 				init: function () {
 					var self = this;
-					this.el.addEventListener('click', function() {
+					this.el.addEventListener('mousedown', function() {
 						var vid = document.querySelector(self.data);
 						if (vid.paused) {
 							vid.play();
@@ -39,8 +55,21 @@
 				},
 			});
 		</script>
-		<video id=vid-source>
-			<source src="https://media-streaming.wmflabs.org/constrained/transcoded/9/96/Curiosity%27s_Seven_Minutes_of_Terror.ogv/Curiosity%27s_Seven_Minutes_of_Terror.ogv.360p.webm" type="video/webm; codecs=vp8,vorbis"></source>
-		</video>
+		<a-scene>
+			<a-camera>
+				<a-cursor></a-cursor>
+			</a-camera>
+
+			<!-- the floor -->
+			<a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+
+			<!-- the virtual screen -->
+			<a-video position="0 1.875 -4" rotation="0 0 0" width="4" height="2.25"  src="#vid-source" playpause=".vid-control"></a-video>
+
+			<!-- the control bar -->
+			<a-plane position="0 0.5 -3.5" rotation="-10 0 0" width="3" height="0.5" color="#4080c0" playpause=".vid-control"></a-plane>
+
+			<a-sky color="#ECECEC"></a-sky>
+		</a-scene>
 	</body>
 </html>
