@@ -10,6 +10,8 @@ Gaze at the video plane or the control bar and tap/click to start/stop the video
 
 If the browser supports WebM VP8+Vorbis playback natively (Firefox, Chrome) it will use native decoding, otherwise (Safari, Edge) it will use the ogv.js decoder automatically. This uses more CPU, but on a background thread so "in theory" should not slow down main-thread rendering too much.
 
+[See current live demo](https://brionv.com/misc/ohgeevee/).
+
 ![demo](demo.jpg)
 
 # Is this useful?
